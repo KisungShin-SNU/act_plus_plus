@@ -1,3 +1,22 @@
+# virtualkss
+```
+#https://docs.trossenrobotics.com/aloha_docs/1.0/operation/training.html
+
+git clone https://github.com/KisungShin-SNU/act_plus_plus.git
+cd act_plus_plus
+conda create -n act_plus_plus_virtualkss python=3.8.10
+conda activate act_plus_plus_virtualkss
+pip install -r requirements.txt
+cd act_plus_plus
+pip install -e .
+git clone https://github.com/Interbotix/aloha.git
+cd aloha
+pip install -e .
+cd ..
+
+CUDA_VISIBLE_DEVICES=7 python3 imitate_episodes.py --task_name towel --ckpt_dir ckpt_towel --policy_class ACT --kl_weight 10 --chunk_size 50 --hidden_dim 512 --batch_size 8 --dim_feedforward 3200 --num_steps 2000  --lr 1e-5 --seed 0
+```
+
 # Imitation Learning Algorithms and Co-training for Mobile ALOHA
 
 Original Project Websites:

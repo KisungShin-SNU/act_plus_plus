@@ -8,11 +8,20 @@ try:
 except ImportError:
     DATA_DIR = os.path.expanduser('~/aloha_data')
 
+DATA_DIR = '../data'
+
 TASK_CONFIGS = {
 
     'aloha_mobile_hello_aloha':{
         'dataset_dir': DATA_DIR + '/aloha_mobile_hello_aloha',
         'episode_len': 800,
+        'camera_names': ['cam_high', 'cam_left_wrist', 'cam_right_wrist']
+    },
+
+    'towel':{
+        'dataset_dir': DATA_DIR + '/towel',
+        'num_episodes': 50,
+        'episode_len': 1000,
         'camera_names': ['cam_high', 'cam_left_wrist', 'cam_right_wrist']
     },
 

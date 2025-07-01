@@ -12,13 +12,12 @@ import numpy as np
 import torch
 from torchvision import transforms
 from tqdm import tqdm
-import wandb
+#import wandb
 
 from detr.models.latent_model import Latent_Model_Transformer
 from policy import (
     ACTPolicy,
     CNNMLPPolicy,
-    DiffusionPolicy
 )
 from utils import (
     load_data,
@@ -49,7 +48,7 @@ def main(args):
     validate_every = args['validate_every']
     save_every = args['save_every']
     resume_ckpt_path = args['resume_ckpt_path']
-
+    
     # get task parameters
     task_config = TASK_CONFIGS[task_name]
     dataset_dir = task_config['dataset_dir']
@@ -142,14 +141,14 @@ def main(args):
         os.makedirs(ckpt_dir)
     config_path = os.path.join(ckpt_dir, 'config.pkl')
     expr_name = ckpt_dir.split('/')[-1]
-    if not is_eval:
-        wandb.init(
-            project="ExampleProject",
-            reinit=True,
-            entity="ExampleEntity",
-            name=expr_name,
-        )
-        wandb.config.update(config)
+    # if not is_eval:
+    #     wandb.init(
+    #         project="ExampleProject",
+    #         reinit=True,
+    #         entity="ExampleEntity",
+    #         name=expr_name,
+    #     )
+    #     wandb.config.update(config)
     with open(config_path, 'wb') as f:
         pickle.dump(config, f)
     if is_eval:
@@ -196,7 +195,7 @@ def main(args):
     ckpt_path = os.path.join(ckpt_dir, 'policy_best.ckpt')
     torch.save(best_state_dict, ckpt_path)
     print(f'Best ckpt, val loss {min_val_loss:.6f} @ step{best_step}')
-    wandb.finish()
+    #wandb.finish()
 
 
 def make_policy(policy_class, policy_config):
@@ -559,7 +558,7 @@ def train_bc(train_dataloader, val_dataloader, config):
                     best_ckpt_info = (step, min_val_loss, deepcopy(policy.serialize()))
             for k in list(validation_summary.keys()):
                 validation_summary[f'val_{k}'] = validation_summary.pop(k)
-            wandb.log(validation_summary, step=step)
+            #wandb.log(validation_summary, step=step)
             print(f'Val loss:   {epoch_val_loss:.5f}')
             summary_string = ''
             for k, v in validation_summary.items():
@@ -575,7 +574,7 @@ def train_bc(train_dataloader, val_dataloader, config):
         loss = forward_dict['loss']
         loss.backward()
         optimizer.step()
-        wandb.log(forward_dict, step=step) # not great, make training 1-2% slower
+        #wandb.log(forward_dict, step=step) # not great, make training 1-2% slower
 
         if step % save_every == 0:
             ckpt_path = os.path.join(ckpt_dir, f'policy_step_{step}_seed_{seed}.ckpt')
