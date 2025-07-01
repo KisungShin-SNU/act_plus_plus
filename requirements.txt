@@ -1,0 +1,17 @@
+dm_control==1.0.14
+einops
+h5py
+ipython
+matplotlib
+modern_robotics
+mujoco==2.3.7
+opencv-python
+packaging
+pexpect
+pyquaternion
+pyyaml
+rospkg
+torch
+torchvision
+transforms3d
+wandb
