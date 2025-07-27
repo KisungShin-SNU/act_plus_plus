@@ -529,6 +529,16 @@ def train_bc(train_dataloader, val_dataloader, config):
     if config['resume_ckpt_path'] is not None:
         loading_status = policy.deserialize(torch.load(config['resume_ckpt_path']))
         print(f'Resume policy from: {config["resume_ckpt_path"]}, Status: {loading_status}')
+
+        #virtualkss
+        import re
+        match = re.search(r'policy_step_(\d+)', config["resume_ckpt_path"])
+        if match:
+            step_number = int(match.group(1))
+            print("Extracted step number:", step_number)
+        else:
+            print("No step number found.")
+    
     policy.cuda()
     optimizer = make_optimizer(policy_class, policy)
 
@@ -578,6 +588,9 @@ def train_bc(train_dataloader, val_dataloader, config):
 
         if step % save_every == 0:
             ckpt_path = os.path.join(ckpt_dir, f'policy_step_{step}_seed_{seed}.ckpt')
+            #virtualkss
+            if config['resume_ckpt_path'] is not None:
+                ckpt_path = os.path.join(ckpt_dir, f'policy_step_{step + step_number}_seed_{seed}.ckpt')
             torch.save(policy.serialize(), ckpt_path)
 
     ckpt_path = os.path.join(ckpt_dir, 'policy_last.ckpt')
@@ -666,7 +679,8 @@ if __name__ == '__main__':
         '--validate_every',
         action='store',
         type=int,
-        default=500,
+        default=5000,
+        #virtualkss default=500,
         help='Number of steps between validations during training',
         required=False,
     )
@@ -674,7 +688,8 @@ if __name__ == '__main__':
         '--save_every',
         action='store',
         type=int,
-        default=500,
+        default=5000,
+        #virtualkss default=500,
         help='Number of steps between checkpoints during training',
         required=False,
     )
