@@ -14,6 +14,8 @@ cd aloha
 pip install -e .
 cd ..
 
+# define config in act_plus_plus/act_plus_plus/aloha/aloha/constants.py
+
 # terminal 1
 bash run_1.sh
 # terminal 2
